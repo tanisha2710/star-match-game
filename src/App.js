@@ -1,8 +1,8 @@
-import Game from "./Game";
+import StarMatch from "./StarMatch";
 
 function App() {
   return (
-   <Game />
+   <StarMatch/>
   );
 }
 

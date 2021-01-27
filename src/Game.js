@@ -4,23 +4,39 @@ import NumberPanel from "./NumberPanel";
 import { utils } from "./functionUtils"
 import React from 'react';
 import {status} from "./NumberStatus";
+import PlayAgain from "./PlayAgain";
 
-export default function Game () {
+export default function Game (props) {
     const [stars, setStars] = React.useState(utils.random(1, 5));
     const [numbersAvailable, setNumbersAvailable] = React.useState(utils.range(1,9));
     const [numbersSelected, setNumbersSelected] = React.useState([]);
+    const [timer, setTimer] = React.useState(20);
+
+    const gameStatus = numbersAvailable.length ===0
+    ? "won"
+    : timer
+    ? "active"
+    : "lost"
+
+
+    React.useEffect(() =>{
+      if (timer > 0 && numbersAvailable.length > 0) {
+        const timerId = setTimeout(() => {
+          setTimer(timer - 1);
+        }, 1000);
+        return () => clearTimeout(timerId);
+      }
+    },[timer])
 
     const onNumberClick = (number, NumberStatus) => {
-      //console.log("came here");
       if(NumberStatus === status.USED){
         return
       }
-      //console.log("came till here");
       const newNumbersSelected = 
       NumberStatus === status.AVAILABLE
        ? numbersSelected.concat(number) 
        : numbersSelected.filter(num => num!== number);
-      //console.log("new numbers", newNumbersSelected); 
+
 
        if(utils.sum(newNumbersSelected) === stars){
          const newNumbersAvailable = numbersAvailable.filter(num => !newNumbersSelected.includes(num));
@@ -53,7 +69,11 @@ export default function Game () {
           </div>
           <div className="body">
             <div className="left">
-                  <StarsPanel count={stars} />
+            {gameStatus !== 'active' ? (
+          	<PlayAgain onClick={props.startNewGame} gameStatus={gameStatus} />
+          ) : (
+          	<StarsPanel count={stars} />
+          )}
             </div>
             <div className="right">
               {utils.range(1, 9).map(number => (
@@ -67,7 +87,7 @@ export default function Game () {
               ))}
             </div>
           </div>
-          <div className="timer">Time Remaining: 10</div>
+          <div className="timer">Time Remaining: {timer}</div>
         </div>
       );
 }
