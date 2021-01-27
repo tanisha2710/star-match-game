@@ -1,13 +1,18 @@
 
+const colors = {
+  1: 'lightgreen',
+  2: 'lightgray',
+  3: 'deepskyblue',
+  4: 'lightcoral',
+};
 
- const PlayNumber = props => (
-    <button
+ const NumberPanel = props => 
+   <button
       className="number"
-      //style={{backgroundColor: colors[props.status]}}
+      style={{backgroundColor: colors[props.status]}}
       //onClick={() => props.onClick(props.number, props.status)}
     >
       {props.number}
     </button>
-  );
 
-  export default PlayNumber;
+  export default NumberPanel;
