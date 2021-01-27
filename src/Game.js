@@ -7,15 +7,36 @@ import {status} from "./NumberStatus";
 
 export default function Game () {
     const [stars, setStars] = React.useState(utils.random(1, 5));
-    const [numbersAvailable, setNumbersAvailable] = React.useState([1,3,5,6]);
-    const [numbersSelected, setNumbersSelected] = React.useState([1,3]);
-    const onNumberClick = (number) =>{
-      // if(isNumberClickedUsed(number, numbersAvailable))
-      console.log("hii");
+    const [numbersAvailable, setNumbersAvailable] = React.useState(utils.range(1,9));
+    const [numbersSelected, setNumbersSelected] = React.useState([]);
+
+    const onNumberClick = (number, NumberStatus) => {
+      //console.log("came here");
+      if(NumberStatus === status.USED){
+        return
+      }
+      //console.log("came till here");
+      const newNumbersSelected = 
+      NumberStatus === status.AVAILABLE
+       ? numbersSelected.concat(number) 
+       : numbersSelected.filter(num => num!== number);
+      //console.log("new numbers", newNumbersSelected); 
+
+       if(utils.sum(newNumbersSelected) === stars){
+         const newNumbersAvailable = numbersAvailable.filter(num => !newNumbersSelected.includes(num));
+         setNumbersAvailable(newNumbersAvailable);
+         setNumbersSelected([]);
+         setStars(utils.randomSumIn(newNumbersAvailable, 9));
+       }else{
+        setNumbersSelected(newNumbersSelected);
+       }
+
+
     }
     const numbersSelectedWrong = utils.sum(numbersSelected) > stars;
 
-    const getStatus = (number) =>{
+    const getStatus = (number) => {
+      console.log("Here ", numbersAvailable);
       if(!numbersAvailable.includes(number)){
         return status.USED;
       }
