@@ -2,7 +2,7 @@ import { utils } from "./functionUtils"
 import React from 'react';
 import {status} from "./NumberStatus";
 
-export const useGameState = timeLimit => {
+export const useGameState = () => {
     const [stars, setStars] = React.useState(utils.random(1, 5));
     const [numbersAvailable, setNumbersAvailable] = React.useState(utils.range(1,9));
     const [numbersSelected, setNumbersSelected] = React.useState([]);
